@@ -1,0 +1,49 @@
+[gd_scene load_steps=8 format=3 uid="uid://c0n6pjjjtnixm"]
+
+[ext_resource type="PackedScene" uid="uid://8ydakeheholl" path="res://scenes/stage.tscn" id="1_er5dl"]
+[ext_resource type="Script" path="res://scripts/SetUVPositionMesh.gd" id="2_3kfyp"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_wa6k8"]
+[ext_resource type="Script" path="res://scripts/Brush.gd" id="4_x2h3c"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1lb14"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_1lc0x"]
+sky_material = SubResource("ProceduralSkyMaterial_1lb14")
+
+[sub_resource type="Environment" id="Environment_8ebu0"]
+background_mode = 2
+sky = SubResource("Sky_1lc0x")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="main" type="Node3D"]
+
+[node name="stage" parent="." instance=ExtResource("1_er5dl")]
+
+[node name="CSGCombiner3D2" parent="stage" index="0"]
+script = ExtResource("2_3kfyp")
+
+[node name="player" parent="." instance=ExtResource("2_wa6k8")]
+
+[node name="env" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="env"]
+environment = SubResource("Environment_8ebu0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="env"]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="DrawViewport" type="SubViewport" parent="."]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1024, 1024)
+render_target_clear_mode = 1
+render_target_update_mode = 4
+
+[node name="Brush" type="Node2D" parent="DrawViewport"]
+script = ExtResource("4_x2h3c")
+
+[editable path="stage"]
